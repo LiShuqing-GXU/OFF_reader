@@ -6,13 +6,13 @@ function b = offread(filename)
 % Geometry Center.
 fi = fopen(filename,'r');
 if fi < 0
-  error(sprintf('File %s not found', filename))
+  error('File %s not found', filename)
 end
 lineco = 1;
 x=fgetl(fi);
 pos = isspace(x);
 m = find(~pos);
-if (length(m) == 0)
+if (isempty(m))
     line = '';
 else
     line = x(m(1):m(length(m)));
@@ -33,8 +33,7 @@ cplist = zeros(3,numvtx);
 for vnum = 1 : numvtx
   coord = sscanf(fgetl(fi), '%e %e %e');
   if length(coord) ~= 3
-    errmsg = sprintf('Each vertex line must contain three coordinates (error on line %d)', lineco);
-    error(errmsg)
+    error('Each vertex line must contain three coordinates (error on line %d)', lineco)
   end
   lineco = lineco + 1;
   cplist(:,vnum) = coord;
@@ -43,10 +42,8 @@ count=1;
 for fnum = 1 : numfacet
   li = fgets(fi);
   numv(:,count) = sscanf(li, '%d');
-  if length(numv) == 0
-    errmsg = sprintf('Missing vertex count field in facet entry (line #%d)', ...
-                       lineco);
-    error(errmsg);
+  if isempty(numv)
+    error('Missing vertex count field in facet entry (line #%d)', lineco);
   end
   count=count+1;
 end
